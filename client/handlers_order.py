@@ -37,6 +37,7 @@ class NewOrderClient:
         available_count = sqlite_bot.get_info_about_prod('count', self.id_prod)
         if count <= available_count:
             self.count = count
+            client_logger.info(f'-----------------{count}------------')
             return True
         else:
             return False
