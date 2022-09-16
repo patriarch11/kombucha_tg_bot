@@ -60,8 +60,10 @@ async def add_target_count_start(callback_data: types.CallbackQuery):
 # catching count and add count to target product
 async def add_target_count(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        async with state.proxy() as data:
+        try:
             cnt = int(message.text)
+        except Exception:
+            cnt = 0
         add_cnt_prod.add_count(cnt)
         await state.finish()
         await state.reset_data()
@@ -82,8 +84,10 @@ async def divide_target_count_start(callback_data: types.CallbackQuery):
 # catching count for divide and divide count from target count
 async def divide_target_count(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        async with state.proxy() as data:
+        try:
             cnt = int(message.text)
+        except Exception:
+            cnt = 0
         if cnt <= div_cnt_prod.check_count():  # checking count for 0
             div_cnt_prod.divide_count(cnt)
             await state.finish()
@@ -170,11 +174,14 @@ async def price_edit_start(callback_data: types.CallbackQuery):
 # catching new price and update this value in database
 async def price_edit(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        new_price = float(message.text)
+        try:
+            new_price = float(message.text)
+        except Exception:
+            new_price = 0
         price_ed_prod.change_price(new_price)
         await state.finish()
         await state.reset_data()
-        await message.reply('Ціну змінено', reply_markup=keyboards.admin_kb_start)
+        await message.reply(f'Ціну змінено на {new_price}', reply_markup=keyboards.admin_kb_start)
 
 
 # register all handler for operation with product cart
