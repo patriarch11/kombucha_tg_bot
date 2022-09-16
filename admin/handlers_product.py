@@ -60,7 +60,8 @@ async def add_target_count_start(callback_data: types.CallbackQuery):
 # catching count and add count to target product
 async def add_target_count(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        cnt = int(message.text)
+        async with state.proxy() as data:
+            cnt = int(message.text)
         add_cnt_prod.add_count(cnt)
         await state.finish()
         await state.reset_data()
@@ -81,7 +82,8 @@ async def divide_target_count_start(callback_data: types.CallbackQuery):
 # catching count for divide and divide count from target count
 async def divide_target_count(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        cnt = int(message.text)
+        async with state.proxy() as data:
+            cnt = int(message.text)
         if cnt <= div_cnt_prod.check_count():  # checking count for 0
             div_cnt_prod.divide_count(cnt)
             await state.finish()
