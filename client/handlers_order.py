@@ -88,7 +88,7 @@ async def add_count_to_order(message: types.Message, state: FSMContext):
 
     res = new_order.add_count(cnt)
     client_logger.info(f'{res}+++++++++++++++++=')
-    if res is True:
+    if res is True and cnt > 0:
         await OrderStates.next()
         await message.reply('Введіть інфромацію для відправлення замовлення вам по пошті',
                             reply_markup=keyboards.client_cancel_kb)
