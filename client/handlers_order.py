@@ -79,6 +79,7 @@ async def add_count_to_order(message: types.Message, state: FSMContext):
     cnt = 0
     try:
         cnt = int(message)
+        client_logger.info(f'nttnt{cnt}+++++++++++++++++=')
     except Exception as ex:
         client_logger.error(f'[-] {ex}')
         await state.finish()
