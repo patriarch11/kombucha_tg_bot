@@ -165,46 +165,35 @@ async def load_description(message: types.Message, state: FSMContext):
 # get price for new product
 async def load_price(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        if re.fullmatch(r'[^0, \D]\d+.?\d*', message.text):
-            async with state.proxy() as data:
-                try:
-                    data['price'] = float(message.text)
-                    await LoadStates.next()
-                    await message.reply('Вкажіть к-ть доданого товару')
-                except Exception:
-                    await state.finish()
-                    await state.reset_data()
-                    await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
-                                        reply_markup=keyboards.admin_kb_start)
-
-        else:
-            await state.finish()
-            await state.reset_data()
-            await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
-                                reply_markup=keyboards.admin_kb_start)
+        async with state.proxy() as data:
+            try:
+                data['price'] = float(message.text)
+                await LoadStates.next()
+                await message.reply('Вкажіть к-ть доданого товару')
+            except Exception as ex:
+                admin_logger.error(f'[-] {ex}')
+                await state.finish()
+                await state.reset_data()
+                await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
+                                    reply_markup=keyboards.admin_kb_start)
 
 
 # get count for new product & finish load state
 async def load_count(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        if re.fullmatch(r'[^0, \D]\d+', message.text):
-            async with state.proxy() as data:
-                try:
-                    data['count'] = int(message.text)
-                    await insert_new_prod_to_db(tuple(data.values()))
-                    await state.finish()
-                    await state.reset_data()
-                except Exception:
-                    await state.finish()
-                    await state.reset_data()
-                    await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
-                                        reply_markup=keyboards.admin_kb_start)
 
-        else:
-            await state.finish()
-            await state.reset_data()
-            await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
-                                reply_markup=keyboards.admin_kb_start)
+        async with state.proxy() as data:
+            try:
+                data['count'] = int(message.text)
+                await insert_new_prod_to_db(tuple(data.values()))
+                await state.finish()
+                await state.reset_data()
+            except Exception as ex:
+                admin_logger.error(f'[-] {ex}')
+                await state.finish()
+                await state.reset_data()
+                await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
+                                    reply_markup=keyboards.admin_kb_start)
 
 
 # insert product to database
