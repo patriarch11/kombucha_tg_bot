@@ -167,7 +167,13 @@ async def load_price(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
         if re.fullmatch(r'[^0, \D]\d+.?\d*', message.text):
             async with state.proxy() as data:
-                data['price'] = float(message.text)
+                try:
+                    data['price'] = float(message.text)
+                except Exception:
+                    await state.finish()
+                    await state.reset_data()
+                    await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
+                                        reply_markup=keyboards.admin_kb_start)
             await LoadStates.next()
             await message.reply('Вкажіть к-ть доданого товару')
         else:
@@ -182,7 +188,13 @@ async def load_count(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
         if re.fullmatch(r'[^0, \D]\d+', message.text):
             async with state.proxy() as data:
-                data['count'] = int(message.text)
+                try:
+                    data['count'] = int(message.text)
+                except Exception:
+                    await state.finish()
+                    await state.reset_data()
+                    await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'],
+                                        reply_markup=keyboards.admin_kb_start)
             await insert_new_prod_to_db(tuple(data.values()))
             await state.finish()
             await state.reset_data()
