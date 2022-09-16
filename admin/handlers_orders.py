@@ -71,8 +71,12 @@ async def start_find_by_id(message: types.Message):
 # show order by id
 async def find_by_id(message: types.Message, state: FSMContext):
     if message.from_user.id == bot.admin_ID:
-        finding_id = int(message.text)
-        order = sqlite_bot.find_order_by_id(finding_id)
+        order = None
+        try:
+            finding_id = int(message.text)
+            order = sqlite_bot.find_order_by_id(finding_id)
+        except Exception:
+            pass
         if order:
             await message.reply(f'order_id: {order[0]}\nuser_id: {order[1]}\n'
                                 f'product_id: {order[2]}\n'
