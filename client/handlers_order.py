@@ -82,7 +82,7 @@ async def add_count_to_order(message: types.Message, state: FSMContext):
         await state.finish()
         await state.reset_data()
         await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'], reply_markup=keyboards.client_kb)
-    if res:
+    if res is True:
         await OrderStates.next()
         await message.reply('Введіть інфромацію для відправлення замовлення вам по пошті',
                             reply_markup=keyboards.client_cancel_kb)
