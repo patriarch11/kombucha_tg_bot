@@ -35,6 +35,7 @@ class NewOrderClient:
 
     def add_count(self, count: int) -> bool:
         available_count = sqlite_bot.get_info_about_prod('count', self.id_prod)
+        client_logger.info(f'--------{available_count}-----------')
         if count <= available_count:
             self.count = count
             client_logger.info(f'-----------------{count}------------')
