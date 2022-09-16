@@ -73,24 +73,24 @@ async def start_buy_product(callback_data: types.CallbackQuery):
 
 # add count to order info
 async def add_count_to_order(message: types.Message, state: FSMContext):
+    res = None
     try:
         cnt = int(message)
         res = new_order.add_count(cnt)
-        if res:
-            await OrderStates.next()
-            await message.reply('Введіть інфромацію для відправлення замовлення вам по пошті',
-                                reply_markup=keyboards.client_cancel_kb)
-        else:
-            await state.finish()
-            await state.reset_data()
-            await message.reply('На даний мометн така к-ть товару не доступна, замовлення скасовано',
-                                reply_markup=keyboards.client_kb)
     except Exception as ex:
         client_logger.error(f'[-] {ex}')
         await state.finish()
         await state.reset_data()
         await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'], reply_markup=keyboards.client_kb)
-
+    if res:
+        await OrderStates.next()
+        await message.reply('Введіть інфромацію для відправлення замовлення вам по пошті',
+                            reply_markup=keyboards.client_cancel_kb)
+    else:
+        await state.finish()
+        await state.reset_data()
+        await message.reply('На даний мометн така к-ть товару не доступна, замовлення скасовано',
+                            reply_markup=keyboards.client_kb)
 
 # add mailing info to order info
 async def add_mailing_info_to_order(message: types.Message, state: FSMContext):
