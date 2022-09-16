@@ -88,7 +88,7 @@ async def find_by_id(message: types.Message, state: FSMContext):
                                 reply_markup=keyboards.create_order_inline_admin_kb(order[0]))
             await message.reply('+', reply_markup=keyboards.admin_kb_orders)
         else:
-            await message.reply(f'{finding_id} не знайдено', reply_markup=keyboards.admin_kb_orders)
+            await message.reply(f'не знайдено', reply_markup=keyboards.admin_kb_orders)
         await state.finish()
         await state.reset_data()
 
