@@ -35,8 +35,6 @@ class NewOrderClient:
 
     def add_count(self, count: int) -> bool:
         available_count = sqlite_bot.get_info_about_prod('count', self.id_prod)
-        client_logger.info(f'--------{available_count}-----------')
-        client_logger.info(f'-----------------{count}------------')
         if count <= available_count:
             self.count = count
 
@@ -79,7 +77,6 @@ async def add_count_to_order(message: types.Message, state: FSMContext):
     cnt = 0
     try:
         cnt = int(message.text)
-        client_logger.info(f'nttnt{cnt}+++++++++++++++++=')
     except Exception as ex:
         client_logger.error(f'[-] {ex}')
         await state.finish()
@@ -87,7 +84,6 @@ async def add_count_to_order(message: types.Message, state: FSMContext):
         await message.reply(bot_messages.adm_handlers_msgs['incorrect_value'], reply_markup=keyboards.client_kb)
 
     res = new_order.add_count(cnt)
-    client_logger.info(f'{res}+++++++++++++++++=')
     if res is True and cnt > 0:
         await OrderStates.next()
         await message.reply('Введіть інфромацію для відправлення замовлення вам по пошті',
