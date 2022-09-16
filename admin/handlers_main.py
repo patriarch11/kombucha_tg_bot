@@ -17,7 +17,12 @@ admin_logger = logging.getLogger('bot.admin')
 
 # login to admin account
 async def get_admin_tools(message: types.Message):
-    if message.text.split(' ')[1] == ADMIN_PASS:
+    passwd = None
+    try:
+        passwd = message.text.split(' ')[1]
+    except Exception as ex:
+        admin_logger.error(f'[-] {ex}')
+    if passwd == ADMIN_PASS:
         bot.admin_ID = message.from_user.id
         await bot.send_message(bot.admin_ID, 'Admin account activated', reply_markup=keyboards.admin_kb_start)
         admin_logger.info(f'[+] Current admin is {bot.admin_ID}')
