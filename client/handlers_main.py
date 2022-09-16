@@ -39,6 +39,7 @@ async def catalog_button_handler(message: types.Message):
         await bot.send_photo(message.from_user.id, product[0], f'id: {product[1]}\nНазва товару: {product[2]}\n'
                                                                f'Опис:\n{product[3]}\nЦіна: {product[4]} UAH',
                              reply_markup=keyboards.create_inline_prod_btn(prod_id=product[1]))
+
     await message.delete()
 
 
@@ -52,7 +53,7 @@ async def user_orders_button_handler(message: types.Message):
                                                      f'буде доставлено: {order[5]}\n'
                                                      f'дата замовлення: {order[6]}\nстатус: {order[7]}',
                                reply_markup=keyboards.create_inline_order_btn(order[0]))
-        await message.delete()
+    await message.delete()
 
 
 # handler for cancel any state
