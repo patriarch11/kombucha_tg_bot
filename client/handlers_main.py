@@ -52,6 +52,7 @@ async def user_orders_button_handler(message: types.Message):
                                                      f'буде доставлено: {order[5]}\n'
                                                      f'дата замовлення: {order[6]}\nстатус: {order[7]}',
                                reply_markup=keyboards.create_inline_order_btn(order[0]))
+        await message.delete()
 
 
 # handler for cancel any state
